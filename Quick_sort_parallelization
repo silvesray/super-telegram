@@ -31,41 +31,35 @@ int partition(int arr[], int low, int high)
 		}
 	}
 }
-
-/* The main function that implements QuickSort
- arr[] --> Array to be sorted,
-  low  --> Starting index,
-  high  --> Ending index
- */
  
 void quicksort(int arr[], int low, int high)
 {
-	int j;
-	if(low < high)
+int j;
+if(low < high)
   {
-		j = partition(arr, low, high);
-		#pragma omp parallel sections
+	j = partition(arr, low, high);
+	#pragma omp parallel sections
+	{
+		#pragma omp section
 		{
-			#pragma omp section
-			{
-        	quicksort(arr,0, j - 1);
-    	}
-			#pragma omp section
-			{
-        quicksort(arr, j + 1, n-1);
+        		quicksort(arr,0, j - 1);
+    		}
+		#pragma omp section
+		{
+        		quicksort(arr, j + 1, n-1);
    		}
-		}
 	}
+  }
 }
 
 
 int main()
 {
-	int start_s=clock();//start time
+	int start_s=clock();
 	for(int i=0;i<n;i++){
-		arr[i]=rand()%n;//filling random value
+		arr[i]=rand()%n;
 	}
-  quicksort(arr, 0, n - 1);//calling quicksort function
+  quicksort(arr, 0, n - 1);
 	int stop_s=clock();//end Time
 	printf("Time taken: %.6fs\n", (double)(stop_s - start_s));
 }
